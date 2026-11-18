@@ -9,7 +9,7 @@ Full-stack Resort Reservation System built with **Laravel 12 REST API + Sanctum*
 ## 1. Project Structure
 
 ```text
-C:\Jeason Final\
+Finalproject/
 ├── backend/                  # Laravel 12 REST API (/api/v1) + Sanctum + Neon PostgreSQL
 │   ├── app/
 │   │   ├── Http/Controllers/Api/V1/
@@ -20,7 +20,7 @@ C:\Jeason Final\
 │   │   ├── migrations/
 │   │   └── seeders/DatabaseSeeder.php
 │   ├── routes/api.php
-│   └── .env / .env.example
+│   └── .env.example
 ├── frontend/                 # React (Vite) + React Router + Axios + Recharts
 │   ├── public/images/resorts/
 │   ├── src/
@@ -33,7 +33,7 @@ C:\Jeason Final\
 │   │   │   ├── customer/     # Home, Explore, Resort Details, Rooms, Booking, Foods & Drinks, Profile
 │   │   │   └── admin/        # Overview, Resorts, Rooms, Reservations, Customers, Payments, Reviews, Reports, Staff
 │   │   └── styles/           # Design tokens & global styles matching Figma
-│   └── .env / .env.example
+│   └── .env.example
 └── start-all.bat             # One-click launcher for Backend (8000) & Frontend (5173)
 ```
 
@@ -43,9 +43,9 @@ C:\Jeason Final\
 
 ### Backend (`/backend` - Laravel + Neon PostgreSQL)
 ```powershell
-cd "C:\Jeason Final\backend"
+cd backend
 composer install
-# Configure .env with your Neon PostgreSQL credentials (already configured)
+# Configure .env with your Neon PostgreSQL credentials
 php artisan migrate:fresh --seed
 php artisan serve --port=8000
 ```
@@ -53,7 +53,7 @@ php artisan serve --port=8000
 
 ### Frontend (`/frontend` - React + Vite)
 ```powershell
-cd "C:\Jeason Final\frontend"
+cd frontend
 npm install
 npm run dev
 ```
@@ -62,22 +62,17 @@ npm run dev
 
 ---
 
-## 3. Accounts (Seeded in Neon PostgreSQL)
+## 3. Authentication & Access
 
 ### Official Admin Account (`/admin/login`)
 | Role | Name | Email | Password | Permissions |
 |---|---|---|---|---|
 | **Admin** | Jeaspm Dinoy | `cordovastaysreservation@gmail.com` | `admin12345` | Full access (Overview, Resorts, Rooms, Reservations, Customers, Payments, Reviews, Reports, Staff) |
 
-### Customer / User Accounts (`/auth/login`)
-*(Password for all sample customers is **`password`**, or register your own account at `/auth/register`)*
-| Name | Email | Password | Phone |
-|---|---|---|---|
-| **Maria Santos** | `maria@example.com` | `password` | `0917 123 1024` |
-| **John Reyes** | `john@example.com` | `password` | `0917 234 2055` |
-| **Ana Dela Cruz** | `ana@example.com` | `password` | `0917 345 3188` |
-| **Mark Lim** | `mark@example.com` | `password` | `0917 456 4471` |
-| **Guest Surname** | `guest@example.com` | `password` | `0917 555 8899` |
+### Customer Portal (`/auth/register` & `/auth/login`)
+- Customers can create their own account at **`/auth/register`** and sign in at **`/auth/login`**.
+- **Password Policy:** At least 8 characters, including at least 1 uppercase letter (`A–Z`), 1 number (`0–9`), and no spaces.
+- **Forgot Password:** Supports a 6-digit verification code sent via Gmail (`/auth/forgot-password`).
 
 ---
 

@@ -1351,9 +1351,9 @@ export function MyProfilePage() {
   const { user, updateCustomerState, logoutCustomer } = useAuth();
   const { showToast } = useToast();
 
-  const [firstName, setFirstName] = useState(user?.first_name || 'Guest');
-  const [lastName, setLastName] = useState(user?.last_name || 'Surname');
-  const [email, setEmail] = useState(user?.email || 'guest@example.com');
+  const [firstName, setFirstName] = useState(user?.first_name || '');
+  const [lastName, setLastName] = useState(user?.last_name || '');
+  const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState(user?.phone || '');
   const [emailUpdates, setEmailUpdates] = useState(user?.email_updates ?? true);
   const [saving, setSaving] = useState(false);

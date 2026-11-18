@@ -104,6 +104,10 @@ api.interceptors.response.use(
         localStorage.removeItem('cs_admin_token');
         localStorage.removeItem('cs_admin_user');
         window.location.href = '/admin/login';
+      } else if (!path.startsWith('/admin') && !path.startsWith('/auth')) {
+        localStorage.removeItem('cs_token');
+        localStorage.removeItem('cs_user');
+        window.location.href = '/auth/login';
       }
     }
     return Promise.reject(error);

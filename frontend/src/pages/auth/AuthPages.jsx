@@ -371,7 +371,7 @@ export function ForgotPasswordStep1Page() {
 export function ForgotPasswordStep2Page() {
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const savedEmail = sessionStorage.getItem('cs_reset_email') || 'cordovastaysreservation@gmail.com';
+  const savedEmail = sessionStorage.getItem('cs_reset_email') || '';
 
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -439,7 +439,7 @@ export function ForgotPasswordStep2Page() {
 export function CreateNewPasswordPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const savedEmail = sessionStorage.getItem('cs_reset_email') || 'maria@example.com';
+  const savedEmail = sessionStorage.getItem('cs_reset_email') || '';
   const savedCode = sessionStorage.getItem('cs_reset_verified_code') || '';
 
   const [password, setPassword] = useState('');

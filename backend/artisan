@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+
+use Illuminate\Foundation\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+
+if (! extension_loaded('pdo_pgsql') && is_dir(__DIR__.'/php-ini') && ! getenv('CORDOVA_PGSQL_BOOTSTRAPPED')) {
+    putenv('CORDOVA_PGSQL_BOOTSTRAPPED=1');
+    putenv('PHP_INI_SCAN_DIR='.__DIR__.DIRECTORY_SEPARATOR.'php-ini');
+    $cmd = escapeshellarg(PHP_BINARY).' '.implode(' ', array_map('escapeshellarg', $argv));
+    passthru($cmd, $exitCode);
+    exit($exitCode);
+}
+putenv('PHP_INI_SCAN_DIR='.__DIR__.DIRECTORY_SEPARATOR.'php-ini');
+
+define('LARAVEL_START', microtime(true));
+
+// Register the Composer autoloader...
+require __DIR__.'/vendor/autoload.php';
+
+// Bootstrap Laravel and handle the command...
+/** @var Application $app */
+$app = require_once __DIR__.'/bootstrap/app.php';
+
+$status = $app->handleCommand(new ArgvInput);
+
+exit($status);

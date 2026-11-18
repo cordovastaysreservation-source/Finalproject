@@ -1,0 +1,32 @@
+# Dependencies & Build outputs
+/backend/vendor/
+/backend/node_modules/
+/frontend/node_modules/
+/frontend/dist/
+/frontend/dist-ssr/
+
+# Environment variables & Secrets
+.env
+.env.*
+!.env.example
+/backend/.env
+/backend/.env.*
+!/backend/.env.example
+/frontend/.env
+/frontend/.env.*
+!/frontend/.env.example
+
+# Logs & Caches
+*.log
+/backend/storage/*.key
+/backend/storage/pail
+/backend/public/hot
+/backend/public/storage
+/backend/public/build
+
+# Reference PDFs & OS/Editor files
+/*.pdf
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,478 @@
+:root {
+  --primary-teal: #0A7F82;
+  --primary-teal-dark: #0B6E75;
+  --dark-teal: #0F3F40;
+  --muted-text: #6B8585;
+  --page-bg: #F4F8F7;
+  --card-bg: #FFFFFF;
+  --card-border: #DCE7E5;
+  --active-pill: #DAF3EE;
+  --admin-sidebar: #153B3B;
+  --admin-active: #277F70;
+  --payment-banner: #9ACFB7;
+  --warning-bg: #FFF6E3;
+  --warning-border: #EBD3A7;
+  --warning-text: #8A5A19;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--page-bg);
+  color: var(--dark-teal);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--primary-teal);
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Customer Portal Layout */
+.portal-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--page-bg);
+}
+
+.portal-topbar {
+  height: 72px;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2ECEA;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.brand-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.brand-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #0B6E75;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F3F40;
+  line-height: 1.15;
+}
+
+.brand-subtitle {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #6B8585;
+  text-transform: uppercase;
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.user-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #DAF3EE;
+  color: #0A7F82;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-chip-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0F3F40;
+}
+
+.portal-body {
+  display: flex;
+  flex: 1;
+}
+
+.portal-sidebar {
+  width: 220px;
+  background-color: #FFFFFF;
+  border-right: 1px solid #E2ECEA;
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.portal-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3E5959;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.portal-nav-item:hover {
+  background-color: #EFF9F6;
+  color: #0A7F82;
+}
+
+.portal-nav-item.active {
+  background-color: #DAF3EE;
+  color: #0A7F82;
+  font-weight: 700;
+}
+
+.portal-main {
+  flex: 1;
+  padding: 28px 36px 48px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0F3F40;
+  margin-bottom: 4px;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: #6B8585;
+  margin-bottom: 22px;
+}
+
+/* Cards & Inputs */
+.cs-card {
+  background: #FFFFFF;
+  border: 1px solid #DCE7E5;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.cs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cs-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cs-btn-primary {
+  background-color: #0B6E75;
+  color: #FFFFFF;
+}
+
+.cs-btn-primary:hover:not(:disabled) {
+  background-color: #095A60;
+}
+
+.cs-btn-outline {
+  background-color: #FFFFFF;
+  color: #0F3F40;
+  border-color: #B8D4D0;
+}
+
+.cs-btn-outline:hover:not(:disabled) {
+  background-color: #F4F8F7;
+}
+
+.cs-btn-pill {
+  border-radius: 9999px;
+}
+
+/* Floating / Inside-Border Label Input */
+.cs-floating-field {
+  background: #FFFFFF;
+  border: 1px solid #CFE0DD;
+  border-radius: 8px;
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: border-color 0.15s;
+}
+
+.cs-floating-field:focus-within {
+  border-color: #0A7F82;
+}
+
+.cs-floating-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #3E5959;
+  margin-bottom: 2px;
+}
+
+.cs-floating-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #0F3F40;
+  width: 100%;
+}
+
+.cs-floating-input::placeholder {
+  color: #6B8585;
+}
+
+/* Standard Stacked Label Input (Auth & Admin Forms) */
+.cs-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cs-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0F3F40;
+}
+
+.cs-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cs-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #CFE0DD;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #0F3F40;
+  background: #FFFFFF;
+  outline: none;
+}
+
+.cs-input:focus {
+  border-color: #0A7F82;
+}
+
+.cs-input:read-only, .cs-input:disabled {
+  background-color: #EDF2F1;
+  color: #6B8585;
+}
+
+.cs-field-error {
+  font-size: 12px;
+  color: #C93B3B;
+  margin-top: 2px;
+}
+
+/* Status Badges */
+.cs-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cs-badge-success {
+  background-color: #DDF3EC;
+  color: #0F6E75;
+}
+
+.cs-badge-warning {
+  background-color: #F9E8C2;
+  color: #7A5214;
+}
+
+.cs-badge-danger {
+  background-color: #FADCD9;
+  color: #A82E2E;
+}
+
+/* Admin Layout */
+.admin-wrapper {
+  min-height: 100vh;
+  display: flex;
+  background-color: #F4F8F7;
+}
+
+.admin-sidebar {
+  width: 240px;
+  background-color: #153B3B;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-height: 100vh;
+}
+
+.admin-brand {
+  padding: 24px 22px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-brand-title {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #FFFFFF;
+}
+
+.admin-brand-sub {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 2px;
+}
+
+.admin-nav {
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.admin-nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+}
+
+.admin-nav-item.active {
+  background-color: #277F70;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.admin-sidebar-footer {
+  padding: 16px 22px 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-topbar {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2ECEA;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-main {
+  padding: 28px 32px 48px;
+  flex: 1;
+}
+
+/* Responsive mobile sidebar collapse */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid #DCE7E5;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: #0F3F40;
+}
+
+@media (max-width: 900px) {
+  .mobile-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .portal-sidebar {
+    position: fixed;
+    left: 0;
+    top: 72px;
+    bottom: 0;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: 4px 0 16px rgba(0,0,0,0.08);
+  }
+  .portal-sidebar.open {
+    transform: translateX(0);
+  }
+  .admin-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+  .portal-main, .admin-main {
+    padding: 20px 16px;
+  }
+}

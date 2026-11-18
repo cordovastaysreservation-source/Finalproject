@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { BookingFlowProvider } from './context/BookingFlowContext';
 import { ToastProvider } from './context/ToastContext';
 
+import GitPushPage from './pages/GitPushPage';
 import CustomerLayout from './layouts/CustomerLayout';
 import AdminLayout from './layouts/AdminLayout';
 
@@ -76,6 +77,10 @@ export default function App() {
         <BookingFlowProvider>
           <BrowserRouter>
             <Routes>
+              {/* GitHub Push Helper Route */}
+              <Route path="/github" element={<GitPushPage />} />
+              <Route path="/git-push" element={<GitPushPage />} />
+
               {/* Customer Auth Routes (Split Layout, No Sidebar) */}
               <Route path="/auth/login" element={<LoginPage />} />
               <Route path="/auth/register" element={<RegisterPage />} />

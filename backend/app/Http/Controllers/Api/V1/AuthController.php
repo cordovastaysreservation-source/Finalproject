@@ -460,6 +460,40 @@ class AuthController extends Controller
         ]);
     }
 
+    public function gitPush(Request $request): JsonResponse
+    {
+        $token = trim((string) $request->input('token', ''));
+        if (empty($token)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please provide a GitHub Personal Access Token.',
+            ], 422);
+        }
+
+        $repoUrl = "https://{$token}@github.com/cordovastaysreservation-source/Finalproject.git";
+        $cmd = "git push \"{$repoUrl}\" main 2>&1";
+
+        $output = [];
+        $returnVar = 0;
+        exec($cmd, $output, $returnVar);
+
+        $outputStr = implode("\n", $output);
+
+        if ($returnVar === 0) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully pushed to GitHub!',
+                'output' => $outputStr,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to push to GitHub. Please verify your token has "repo" permissions.',
+            'error' => $outputStr,
+        ], 500);
+    }
+
     protected function formatUser(User $user): array
     {
         $parts = explode(' ', trim($user->name), 2);

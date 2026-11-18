@@ -67,7 +67,7 @@ npm run dev
 ### Official Admin Account (`/admin/login`)
 | Role | Name | Email | Password | Permissions |
 |---|---|---|---|---|
-| **Admin** | Jeaspm Dinoy | `cordovastaysreservation@gmail.com` | `admin12345` | Full access (Overview, Resorts, Rooms, Reservations, Customers, Payments, Reviews, Reports, Staff) |
+| **Admin** | Jeaspm Dinoy | `cordovastaysreservation@gmail.com` | `•••••••••• (Hashed)` | Full access (Overview, Resorts, Rooms, Reservations, Customers, Payments, Reviews, Reports, Staff) |
 
 ### Customer Portal (`/auth/register` & `/auth/login`)
 - Customers can create their own account at **`/auth/register`** and sign in at **`/auth/login`**.

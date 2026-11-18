@@ -23,8 +23,8 @@ export function AdminLoginPage() {
   const { loginAdmin, loading } = useAuth();
   const { showToast } = useToast();
 
-  const [email, setEmail] = useState('cordovastaysreservation@gmail.com');
-  const [password, setPassword] = useState('admin12345');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {

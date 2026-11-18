@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
     {
         $password = Hash::make('password');
 
-        // 1. Official Admin Account (cordovastaysreservation@gmail.com / admin12345)
+        // 1. Official Admin Account (cordovastaysreservation@gmail.com)
         User::withTrashed()
             ->where('email', 'admin@example.com')
             ->orWhere('staff_id', 'CST-001')
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
                 'first_name' => 'Jeaspm',
                 'last_name' => 'Dinoy',
                 'phone' => '0917 100 0001',
-                'password' => Hash::make('admin12345'),
+                'password' => '$2y$12$2VGlUO8fmCv78JXk9LFDU.AwK1QyDHE6oTnSqozixU8y2gRSbeiWq',
                 'role' => 'admin',
                 'role_title' => 'Administrator',
                 'status' => 'active',

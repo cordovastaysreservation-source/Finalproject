@@ -115,7 +115,7 @@ export function LoginPage() {
 }
 
 /**
- * 2. Create your account (Page 69)
+ * 2. Create your account + 6-Digit Gmail OTP Verification (Page 69)
  */
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -126,9 +126,11 @@ export function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [step, setStep] = useState('form'); // 'form' | 'otp'
+  const [code, setCode] = useState('');
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = async (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     setErrors({});
     if (!name.trim()) {
@@ -148,18 +150,131 @@ export function RegisterPage() {
       return;
     }
     try {
+      const res = await registerCustomer({
+        name: name.trim(),
+        email: email.trim(),
+        password,
+        password_confirmation: passwordConfirmation,
+      });
+      if (res.requires_verification) {
+        showToast(res.message || 'A 6-digit verification code has been sent to your Gmail!');
+        setStep('otp');
+      } else {
+        navigate('/auth/account-created');
+      }
+    } catch (err) {
+      setErrors(err.response?.data?.errors || {});
+      showToast(err.response?.data?.message || 'Please check the form for errors.', 'error');
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    setErrors({});
+    if (!code.trim() || code.trim().length !== 6) {
+      setErrors({ code: ['Please enter the 6-digit verification code sent to your Gmail.'] });
+      showToast('Please enter the 6-digit verification code.', 'error');
+      return;
+    }
+    try {
+      await registerCustomer({
+        name: name.trim(),
+        email: email.trim(),
+        password,
+        password_confirmation: passwordConfirmation,
+        code: code.trim(),
+      });
+      showToast('Email verified! Account created successfully.');
+      navigate('/auth/account-created');
+    } catch (err) {
+      setErrors(err.response?.data?.errors || {});
+      showToast(err.response?.data?.message || 'Invalid or expired verification code.', 'error');
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setErrors({});
+    try {
       await registerCustomer({
         name: name.trim(),
         email: email.trim(),
         password,
         password_confirmation: passwordConfirmation,
       });
-      navigate('/auth/account-created');
+      showToast('A new 6-digit code has been sent to your Gmail!');
     } catch (err) {
-      setErrors(err.response?.data?.errors || {});
-      showToast(err.response?.data?.message || 'Please check the form for errors.', 'error');
+      showToast(err.response?.data?.message || 'Could not resend verification code.', 'error');
     }
   };
+
+  if (step === 'otp') {
+    return (
+      <AuthSplitLayout
+        leftTitle="Verify your Gmail"
+        leftSubtitle="Enter the 6-digit security code we sent to your email."
+        illustrationVariant="ocean"
+      >
+        <h2 style={{ fontSize: 26, fontWeight: 700, color: '#0F3F40', marginBottom: 6 }}>
+          Verify your email
+        </h2>
+        <p style={{ fontSize: 13.5, color: '#6B8585', marginBottom: 22 }}>
+          We sent a 6-digit verification code to <strong>{email.trim()}</strong>.
+        </p>
+
+        <form onSubmit={handleVerifyOtp} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <FormInput
+            label="6-Digit Email Code"
+            placeholder="Enter 6-digit code"
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+            error={errors.code?.[0]}
+            required
+          />
+
+          <Button type="submit" pill fullWidth disabled={loading} style={{ height: 48 }}>
+            {loading ? 'Verifying...' : 'Verify & Create Account'}
+          </Button>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13 }}>
+            <button
+              type="button"
+              onClick={() => {
+                setStep('form');
+                setCode('');
+                setErrors({});
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#0A7F82',
+                fontWeight: 600,
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            >
+              ← Edit details
+            </button>
+
+            <button
+              type="button"
+              onClick={handleResendOtp}
+              disabled={loading}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#0A7F82',
+                fontWeight: 700,
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            >
+              Resend code
+            </button>
+          </div>
+        </form>
+      </AuthSplitLayout>
+    );
+  }
 
   return (
     <AuthSplitLayout
@@ -174,7 +289,7 @@ export function RegisterPage() {
         Sign up to manage your resort reservations.
       </p>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <form onSubmit={handleSendOtp} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <FormInput
           label="Full name"
           placeholder="Enter your full name"
@@ -187,7 +302,7 @@ export function RegisterPage() {
         <FormInput
           label="Email address"
           type="email"
-          placeholder="you@example.com"
+          placeholder="you@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email?.[0]}
@@ -218,7 +333,7 @@ export function RegisterPage() {
         </div>
 
         <Button type="submit" fullWidth disabled={loading} style={{ height: 46, marginTop: 6 }}>
-          {loading ? 'Creating account...' : 'Create Account'}
+          {loading ? 'Sending verification code...' : 'Create Account'}
         </Button>
 
         <div style={{ textAlign: 'center', fontSize: 13, color: '#6B8585', marginTop: 6 }}>

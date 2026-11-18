@@ -202,6 +202,7 @@ module.exports = async (req, res) => {
       const email = String(body.email || '').trim().toLowerCase();
       const password = String(body.password || '');
       const passwordConfirmation = String(body.password_confirmation || '');
+      const code = String(body.code || '').trim();
 
       if (!name) {
         return res.status(422).json({
@@ -240,16 +241,71 @@ module.exports = async (req, res) => {
         });
       }
 
+      // Step 1: Send 6-digit OTP to user's Gmail before creating the account
+      if (!code) {
+        const otp = String(Math.floor(100000 + Math.random() * 900000));
+        await db.query('DELETE FROM password_reset_codes WHERE LOWER(email) = $1', [email]);
+        await db.query(
+          `INSERT INTO password_reset_codes (email, code, expires_at, created_at, updated_at)
+           VALUES ($1, $2, NOW() + INTERVAL '10 minutes', NOW(), NOW())`,
+          [email, otp]
+        );
+
+        await sendMail(
+          email,
+          'Cordova Stays - Your 6-Digit Account Verification Code',
+          `<div style='font-family:Inter,Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #DCE7E5;border-radius:12px;overflow:hidden;'>
+            <div style='background:#0B6E75;color:#FFFFFF;padding:20px 24px;'>
+              <h2 style='margin:0;font-size:20px;'>Cordova Stays</h2>
+              <p style='margin:4px 0 0;font-size:11px;opacity:0.85;'>RESORT RESERVATION SYSTEM • EMAIL VERIFICATION</p>
+            </div>
+            <div style='padding:24px;color:#0F3F40;'>
+              <p style='margin-top:0;'>Hello <strong>${name}</strong>,</p>
+              <p>Welcome to <strong>Cordova Stays</strong>! Use the 6-digit verification code below to verify your email and complete your registration:</p>
+              <div style='background:#DAF3EE;color:#0B6E75;font-size:28px;font-weight:800;letter-spacing:6px;text-align:center;padding:16px;border-radius:10px;margin:20px 0;'>
+                ${otp}
+              </div>
+              <p style='font-size:13px;color:#6B8585;'>This code will expire in <strong>10 minutes</strong>. If you did not create an account, please ignore this email.</p>
+            </div>
+          </div>`
+        );
+
+        return res.json({
+          requires_verification: true,
+          message: 'A 6-digit verification code has been sent to your Gmail!',
+        });
+      }
+
+      // Step 2: Verify the 6-digit OTP code and create the user
+      const { rows: codeRows } = await db.query(
+        'SELECT * FROM password_reset_codes WHERE LOWER(email) = $1 AND code = $2 LIMIT 1',
+        [email, code]
+      );
+      if (!codeRows[0]) {
+        return res.status(422).json({
+          message: 'Invalid verification code. Please check your Gmail and try again.',
+          errors: { code: ['Invalid verification code. Please check your Gmail and try again.'] },
+        });
+      }
+      if (new Date(codeRows[0].expires_at) < new Date()) {
+        return res.status(422).json({
+          message: 'This verification code has expired. Please request a new code.',
+          errors: { code: ['This verification code has expired. Please request a new code.'] },
+        });
+      }
+
       const parts = name.split(/\s+/);
       const firstName = parts[0] || name;
       const lastName = parts.slice(1).join(' ') || '';
 
       const { rows } = await db.query(
-        `INSERT INTO users (name, first_name, last_name, email, phone, password, role, status, country, account_type, email_updates, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, 'customer', 'active', 'Philippines', 'Registered customer', true, NOW(), NOW())
+        `INSERT INTO users (name, first_name, last_name, email, phone, email_verified_at, password, role, status, country, account_type, email_updates, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, NOW(), $6, 'customer', 'active', 'Philippines', 'Registered customer', true, NOW(), NOW())
          RETURNING *`,
         [name, firstName, lastName, email, body.phone || null, hashPassword(password)]
       );
+      await db.query('DELETE FROM password_reset_codes WHERE LOWER(email) = $1', [email]);
+
       const user = rows[0];
       return res.status(201).json({
         message: 'Account created successfully.',

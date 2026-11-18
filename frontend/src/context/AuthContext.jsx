@@ -64,9 +64,11 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const res = await api.post('/auth/register', payload);
-      localStorage.setItem('cs_token', res.data.token);
-      localStorage.setItem('cs_user', JSON.stringify(res.data.user));
-      setUser(res.data.user);
+      if (res.data.token && res.data.user) {
+        localStorage.setItem('cs_token', res.data.token);
+        localStorage.setItem('cs_user', JSON.stringify(res.data.user));
+        setUser(res.data.user);
+      }
       return res.data;
     } finally {
       setLoading(false);

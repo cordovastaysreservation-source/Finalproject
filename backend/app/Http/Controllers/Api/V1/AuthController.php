@@ -32,11 +32,69 @@ class AuthController extends Controller
                 'confirmed',
             ],
             'phone' => ['nullable', 'string', 'max:30'],
+            'code' => ['nullable', 'string', 'size:6'],
         ], [
             'name.regex' => 'Full name cannot be empty or spaces only.',
             'password.regex' => 'Password must contain at least 8 characters, 1 uppercase letter (A-Z), 1 number (0-9), and no spaces.',
             'password.min' => 'Password must be at least 8 characters long.',
         ]);
+
+        $email = strtolower(trim($validated['email']));
+
+        if (empty($validated['code'])) {
+            $otp = (string) random_int(100000, 999999);
+            PasswordResetCode::where('email', $email)->delete();
+            PasswordResetCode::create([
+                'email' => $email,
+                'code' => $otp,
+                'expires_at' => now()->addMinutes(10),
+            ]);
+
+            try {
+                Mail::html(
+                    "<div style='font-family:Inter,Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #DCE7E5;border-radius:12px;overflow:hidden;'>
+                        <div style='background:#0B6E75;color:#FFFFFF;padding:20px 24px;'>
+                            <h2 style='margin:0;font-size:20px;'>Cordova Stays</h2>
+                            <p style='margin:4px 0 0;font-size:11px;opacity:0.85;'>RESORT RESERVATION SYSTEM • EMAIL VERIFICATION</p>
+                        </div>
+                        <div style='padding:24px;color:#0F3F40;'>
+                            <p style='margin-top:0;'>Hello <strong>{$validated['name']}</strong>,</p>
+                            <p>Welcome to <strong>Cordova Stays</strong>! Use the 6-digit verification code below to verify your email and complete your registration:</p>
+                            <div style='background:#DAF3EE;color:#0B6E75;font-size:28px;font-weight:800;letter-spacing:6px;text-align:center;padding:16px;border-radius:10px;margin:20px 0;'>
+                                {$otp}
+                            </div>
+                            <p style='font-size:13px;color:#6B8585;'>This code will expire in <strong>10 minutes</strong>. If you did not create an account, please ignore this email.</p>
+                        </div>
+                    </div>",
+                    function ($message) use ($email) {
+                        $message->to($email)->subject('Cordova Stays - Your 6-Digit Account Verification Code');
+                    }
+                );
+            } catch (\Throwable $e) {
+                Log::warning("Registration OTP mail warning for {$email}: ".$e->getMessage());
+            }
+
+            return response()->json([
+                'requires_verification' => true,
+                'message' => 'A 6-digit verification code has been sent to your Gmail!',
+            ]);
+        }
+
+        $record = PasswordResetCode::where('email', $email)
+            ->where('code', $validated['code'])
+            ->first();
+
+        if (! $record) {
+            throw ValidationException::withMessages([
+                'code' => ['Invalid verification code. Please check your Gmail and try again.'],
+            ]);
+        }
+
+        if ($record->expires_at->isPast()) {
+            throw ValidationException::withMessages([
+                'code' => ['This verification code has expired. Please request a new code.'],
+            ]);
+        }
 
         $parts = explode(' ', trim($validated['name']), 2);
         $firstName = $parts[0] ?? $validated['name'];
@@ -46,8 +104,9 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'email' => strtolower($validated['email']),
+            'email' => $email,
             'phone' => $validated['phone'] ?? null,
+            'email_verified_at' => now(),
             'password' => $validated['password'],
             'role' => 'customer',
             'status' => 'active',
@@ -55,6 +114,8 @@ class AuthController extends Controller
             'account_type' => 'Registered customer',
             'email_updates' => true,
         ]);
+
+        PasswordResetCode::where('email', $email)->delete();
 
         $token = $user->createToken('customer-token')->plainTextToken;
 

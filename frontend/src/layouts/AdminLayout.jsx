@@ -24,7 +24,7 @@ export default function AdminLayout({ title = 'Admin Dashboard', subtitle = '' }
   }, [token, location.pathname]);
 
   if (!token) {
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/auth/login" replace />;
   }
 
   const role = adminUser?.role || 'admin';
@@ -106,7 +106,7 @@ export default function AdminLayout({ title = 'Admin Dashboard', subtitle = '' }
 
   const handleLogout = async () => {
     await logoutAdmin();
-    navigate('/admin/login');
+    navigate('/auth/login');
   };
 
   return (

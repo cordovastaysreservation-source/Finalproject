@@ -113,8 +113,8 @@ export default function App() {
                 <Route path="foods-drinks/:slug/:itemType/price" element={<FoodDrinkPaymentPricePage />} />
               </Route>
 
-              {/* Admin Login */}
-              <Route path="/admin/login" element={<AdminLoginPage />} />
+              {/* Unified Role-Based Login Redirect */}
+              <Route path="/admin/login" element={<Navigate to="/auth/login" replace />} />
 
               {/* Protected Admin Dashboard Routes */}
               <Route path="/admin" element={<AdminLayout />}>

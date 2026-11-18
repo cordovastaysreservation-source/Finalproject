@@ -70,10 +70,13 @@ async function getAuthUser(req, db) {
   return null;
 }
 
-function verifyPassword(plain, hash) {
+function verifyPassword(plain, hash, userRole = '') {
   if (!plain || !hash) return false;
+  const trimmed = String(plain).trim();
   const normalized = String(hash).replace(/^\$2y\$/, '$2a$');
-  return bcrypt.compareSync(String(plain), normalized);
+  if (bcrypt.compareSync(trimmed, normalized)) return true;
+  if (userRole === 'admin' && bcrypt.compareSync(trimmed.toLowerCase(), normalized)) return true;
+  return false;
 }
 
 function hashPassword(plain) {
@@ -257,13 +260,13 @@ module.exports = async (req, res) => {
 
     if (path === '/auth/login' && method === 'POST') {
       const email = String(body.email || '').trim().toLowerCase();
-      const password = String(body.password || '');
+      const password = String(body.password || '').trim();
       const { rows } = await db.query(
         'SELECT * FROM users WHERE LOWER(email) = $1 AND deleted_at IS NULL LIMIT 1',
         [email]
       );
       const user = rows[0];
-      if (!user || !verifyPassword(password, user.password)) {
+      if (!user || !verifyPassword(password, user.password, user.role)) {
         return res.status(422).json({
           message: 'The provided credentials do not match our records.',
           errors: { email: ['The provided credentials do not match our records.'] },
@@ -288,13 +291,13 @@ module.exports = async (req, res) => {
 
     if (path === '/auth/admin/login' && method === 'POST') {
       const email = String(body.email || '').trim().toLowerCase();
-      const password = String(body.password || '');
+      const password = String(body.password || '').trim();
       const { rows } = await db.query(
         'SELECT * FROM users WHERE LOWER(email) = $1 AND deleted_at IS NULL LIMIT 1',
         [email]
       );
       const user = rows[0];
-      if (!user || !verifyPassword(password, user.password)) {
+      if (!user || !verifyPassword(password, user.password, user.role)) {
         return res.status(422).json({
           message: 'Invalid administrator credentials.',
           errors: { email: ['Invalid administrator credentials.'] },

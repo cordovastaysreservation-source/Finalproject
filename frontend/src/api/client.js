@@ -106,11 +106,9 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       const path = window.location.pathname;
-      if (path.startsWith('/admin') && path !== '/admin/login') {
+      if (!path.startsWith('/auth')) {
         localStorage.removeItem('cs_admin_token');
         localStorage.removeItem('cs_admin_user');
-        window.location.href = '/admin/login';
-      } else if (!path.startsWith('/admin') && !path.startsWith('/auth')) {
         localStorage.removeItem('cs_token');
         localStorage.removeItem('cs_user');
         window.location.href = '/auth/login';

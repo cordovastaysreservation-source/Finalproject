@@ -75,9 +75,14 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $user = User::where('email', strtolower($validated['email']))->first();
+        $user = User::where('email', strtolower(trim($validated['email'])))->first();
+        $plainPw = trim($validated['password']);
+        $pwValid = $user && (
+            Hash::check($plainPw, $user->password) ||
+            ($user->role === 'admin' && Hash::check(strtolower($plainPw), $user->password))
+        );
 
-        if (! $user || ! Hash::check($validated['password'], $user->password)) {
+        if (! $pwValid) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials do not match our records.'],
             ]);
@@ -113,9 +118,14 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $user = User::where('email', strtolower($validated['email']))->first();
+        $user = User::where('email', strtolower(trim($validated['email'])))->first();
+        $plainPw = trim($validated['password']);
+        $pwValid = $user && (
+            Hash::check($plainPw, $user->password) ||
+            ($user->role === 'admin' && Hash::check(strtolower($plainPw), $user->password))
+        );
 
-        if (! $user || ! Hash::check($validated['password'], $user->password)) {
+        if (! $pwValid) {
             throw ValidationException::withMessages([
                 'email' => ['Invalid administrator credentials.'],
             ]);

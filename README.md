@@ -57,14 +57,17 @@ cd frontend
 npm install
 npm run dev
 ```
-- Customer Portal runs at: `http://localhost:5173/`
-- Admin Dashboard runs at: `http://localhost:5173/admin/login`
+- Application (Unified Role-Based Login): `http://localhost:5173/auth/login`
 
 ---
 
-## 3. Authentication & Access
+## 3. Unified Role-Based Authentication (`/auth/login`)
 
-### Official Admin Account (`/admin/login`)
+Both **Admin** and **Customer** accounts sign in through the single login page at **`/auth/login`**:
+- **Admin (`role: admin`)** → Automatically redirects to the **Admin Dashboard (`/admin/overview`)**.
+- **Customer (`role: customer`)** → Automatically redirects to the **Customer Portal (`/`)**.
+
+### Official Admin Account
 | Role | Name | Email | Password | Permissions |
 |---|---|---|---|---|
 | **Admin** | Jeaspm Dinoy | `cordovastaysreservation@gmail.com` | `•••••••••• (Hashed)` | Full access (Overview, Resorts, Rooms, Reservations, Customers, Payments, Reviews, Reports, Staff) |

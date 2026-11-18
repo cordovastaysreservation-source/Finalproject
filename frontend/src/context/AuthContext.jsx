@@ -42,7 +42,15 @@ export const AuthProvider = ({ children }) => {
   const loginCustomer = async (email, password) => {
     setLoading(true);
     try {
-      const res = await api.post('/auth/login', { email, password });
+      const res = await api.post('/auth/login', {
+        email: String(email || '').trim(),
+        password: String(password || '').trim(),
+      });
+      if (res.data.user?.role === 'admin') {
+        localStorage.setItem('cs_admin_token', res.data.token);
+        localStorage.setItem('cs_admin_user', JSON.stringify(res.data.user));
+        setAdminUser(res.data.user);
+      }
       localStorage.setItem('cs_token', res.data.token);
       localStorage.setItem('cs_user', JSON.stringify(res.data.user));
       setUser(res.data.user);
@@ -97,7 +105,10 @@ export const AuthProvider = ({ children }) => {
     }
     localStorage.removeItem('cs_admin_token');
     localStorage.removeItem('cs_admin_user');
+    localStorage.removeItem('cs_token');
+    localStorage.removeItem('cs_user');
     setAdminUser(null);
+    setUser(null);
   };
 
   const updateCustomerState = (updatedUser) => {

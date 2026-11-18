@@ -41,9 +41,14 @@ export function LoginPage() {
     e.preventDefault();
     setErrors({});
     try {
-      await loginCustomer(email, password);
-      showToast('Welcome back to Cordova Stays!');
-      navigate(from, { replace: true });
+      const data = await loginCustomer(email, password);
+      if (data.user?.role === 'admin') {
+        showToast('Signed in to Admin Dashboard!');
+        navigate('/admin/overview', { replace: true });
+      } else {
+        showToast('Welcome back to Cordova Stays!');
+        navigate(from, { replace: true });
+      }
     } catch (err) {
       const apiErrors = err.response?.data?.errors || {};
       setErrors(apiErrors);

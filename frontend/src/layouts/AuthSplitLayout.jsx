@@ -21,40 +21,10 @@ export default function AuthSplitLayout({
         <BrandLogo onClick={() => navigate('/')} />
       </header>
 
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '28px 24px 48px',
-        }}
-      >
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: 28,
-            maxWidth: 1060,
-            width: '100%',
-            alignItems: 'stretch',
-          }}
-        >
+      <div className="auth-split-outer">
+        <div className="auth-split-grid">
           {/* Left Teal Panel */}
-          <div
-            style={{
-              backgroundColor: '#0B6E75',
-              borderRadius: 16,
-              padding: '44px 38px',
-              color: '#FFFFFF',
-              position: 'relative',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              minHeight: 500,
-            }}
-          >
+          <div className="auth-left-panel">
             {/* Decorative Translucent Circles */}
             <div
               style={{
@@ -81,17 +51,18 @@ export default function AuthSplitLayout({
               }}
             />
 
-            <div style={{ position: 'relative', zIndex: 2, marginTop: 18 }}>
-              <h1 style={{ fontSize: 30, fontWeight: 700, marginBottom: 10, lineHeight: 1.2 }}>
+            <div className="auth-left-header" style={{ position: 'relative', zIndex: 2, marginTop: 18 }}>
+              <h1 className="auth-left-title" style={{ fontSize: 30, fontWeight: 700, marginBottom: 10, lineHeight: 1.2 }}>
                 {leftTitle}
               </h1>
-              <p style={{ fontSize: 15, color: 'rgba(255, 255, 255, 0.88)', maxWidth: 360 }}>
+              <p className="auth-left-subtitle" style={{ fontSize: 15, color: 'rgba(255, 255, 255, 0.88)', maxWidth: 360 }}>
                 {leftSubtitle}
               </p>
             </div>
 
             {illustrationVariant === 'discover' ? (
               <div
+                className="auth-left-illustration"
                 style={{
                   position: 'relative',
                   zIndex: 2,
@@ -120,6 +91,7 @@ export default function AuthSplitLayout({
               </div>
             ) : (
               <div
+                className="auth-left-illustration"
                 style={{
                   position: 'relative',
                   zIndex: 2,
@@ -145,16 +117,7 @@ export default function AuthSplitLayout({
           </div>
 
           {/* Right Form Card */}
-          <div
-            className="cs-card"
-            style={{
-              padding: '42px 38px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              borderRadius: 16,
-            }}
-          >
+          <div className="cs-card auth-right-card">
             {children}
           </div>
         </div>

@@ -74,7 +74,7 @@ export function ResortCard({ resort, showViewLink = true, onClick }) {
 export function RoomCard({ room, onChoose, scenicPlaceholder = false }) {
   return (
     <div
-      className="cs-card"
+      className="cs-card cs-room-card"
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -84,7 +84,7 @@ export function RoomCard({ room, onChoose, scenicPlaceholder = false }) {
         flexWrap: 'wrap',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20, flex: '1 1 420px' }}>
+      <div className="cs-room-card-body" style={{ display: 'flex', alignItems: 'center', gap: 20, flex: '1 1 320px' }}>
         <ImagePlaceholder
           src={room.image}
           label={room.placeholder_label || room.name?.toUpperCase()}
@@ -94,7 +94,7 @@ export function RoomCard({ room, onChoose, scenicPlaceholder = false }) {
           variant={scenicPlaceholder ? 'scenic' : 'flat'}
           style={{ flexShrink: 0 }}
         />
-        <div>
+        <div style={{ minWidth: 0 }}>
           <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0F3F40', marginBottom: 4 }}>
             {room.name}
           </h3>
@@ -124,7 +124,7 @@ export function RoomCard({ room, onChoose, scenicPlaceholder = false }) {
         </div>
       </div>
 
-      <div style={{ textAlign: 'right', minWidth: 185 }}>
+      <div className="cs-room-card-price" style={{ textAlign: 'right', minWidth: 185 }}>
         <div style={{ fontSize: 18, fontWeight: 800, color: '#0F3F40' }}>
           {formatCurrency(room.price_per_night)} / night
         </div>
@@ -145,7 +145,7 @@ export function RoomCard({ room, onChoose, scenicPlaceholder = false }) {
 export function BookingCard({ booking, onViewDetails }) {
   return (
     <div
-      className="cs-card"
+      className="cs-card cs-booking-card"
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -155,7 +155,7 @@ export function BookingCard({ booking, onViewDetails }) {
         flexWrap: 'wrap',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 18, flex: '1 1 400px' }}>
+      <div className="cs-booking-card-body" style={{ display: 'flex', alignItems: 'center', gap: 18, flex: '1 1 280px' }}>
         <ImagePlaceholder
           src={booking.resort_cover || '/images/resorts/eventesia-garden.jpg'}
           label="RESORT PHOTO"
@@ -165,7 +165,7 @@ export function BookingCard({ booking, onViewDetails }) {
           variant="flat"
           style={{ flexShrink: 0 }}
         />
-        <div>
+        <div style={{ minWidth: 0 }}>
           <div style={{ fontSize: 11.5, fontWeight: 700, color: '#0A7F82', marginBottom: 2 }}>
             Ref: {booking.reference || 'CS-2026-00125'}
           </div>
@@ -182,12 +182,12 @@ export function BookingCard({ booking, onViewDetails }) {
         </div>
       </div>
 
-      <div style={{ textAlign: 'right', minWidth: 140 }}>
+      <div className="cs-booking-card-price" style={{ textAlign: 'right', minWidth: 140 }}>
         <div style={{ fontSize: 18, fontWeight: 800, color: '#0F3F40' }}>
           {formatCurrency(booking.total)}
         </div>
         <div style={{ fontSize: 11.5, color: '#6B8585', marginBottom: 10 }}>Sample total</div>
-        <Button onClick={() => onViewDetails(booking)} style={{ padding: '9px 18px', fontSize: 13 }}>
+        <Button onClick={() => onViewDetails(booking)} style={{ padding: '9px 18px', fontSize: 13, width: '100%' }}>
           View Details
         </Button>
       </div>

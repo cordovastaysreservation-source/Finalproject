@@ -63,6 +63,7 @@ export default function CustomerLayout() {
     {
       key: 'home',
       label: 'Home',
+      shortLabel: 'Home',
       to: '/',
       icon: (
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -73,6 +74,7 @@ export default function CustomerLayout() {
     {
       key: 'explore',
       label: 'Explore Resorts',
+      shortLabel: 'Explore',
       to: '/explore',
       icon: (
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -84,6 +86,7 @@ export default function CustomerLayout() {
     {
       key: 'bookings',
       label: 'My Bookings',
+      shortLabel: 'Bookings',
       to: '/my-bookings',
       icon: (
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -93,8 +96,16 @@ export default function CustomerLayout() {
       ),
     },
     {
+      key: 'foods',
+      label: 'Foods and Drinks',
+      shortLabel: 'Foods',
+      to: '/foods-drinks',
+      icon: <CupStrawIcon />,
+    },
+    {
       key: 'profile',
       label: 'My Profile',
+      shortLabel: 'Profile',
       to: '/profile',
       icon: (
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -102,12 +113,6 @@ export default function CustomerLayout() {
           <path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6" />
         </svg>
       ),
-    },
-    {
-      key: 'foods',
-      label: 'Foods and Drinks',
-      to: '/foods-drinks',
-      icon: <CupStrawIcon />,
     },
   ];
 
@@ -117,13 +122,14 @@ export default function CustomerLayout() {
   return (
     <div className="portal-wrapper">
       <header className="portal-topbar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
             type="button"
             className="mobile-menu-btn"
             onClick={() => setSidebarOpen((o) => !o)}
+            aria-label="Toggle navigation menu"
           >
-            ☰
+            {sidebarOpen ? '✕' : '☰'}
           </button>
           <BrandLogo onClick={() => navigate('/')} />
         </div>
@@ -139,6 +145,13 @@ export default function CustomerLayout() {
       </header>
 
       <div className="portal-body">
+        {sidebarOpen && (
+          <div
+            className="mobile-drawer-backdrop"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
         <aside className={`portal-sidebar ${sidebarOpen ? 'open' : ''}`}>
           {navItems.map((item) => (
             <div
@@ -159,6 +172,24 @@ export default function CustomerLayout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Mobile Bottom App Navigation Bar */}
+      <nav className="portal-bottom-nav">
+        {navItems.map((item) => (
+          <button
+            key={item.key}
+            type="button"
+            onClick={() => {
+              setSidebarOpen(false);
+              navigate(item.to);
+            }}
+            className={`portal-bottom-nav-item ${isNavActive(item.key) ? 'active' : ''}`}
+          >
+            {item.icon}
+            <span>{item.shortLabel}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }

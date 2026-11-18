@@ -111,10 +111,27 @@ export default function AdminLayout({ title = 'Admin Dashboard', subtitle = '' }
 
   return (
     <div className="admin-wrapper">
+      {sidebarOpen && (
+        <div
+          className="mobile-drawer-backdrop"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div className="admin-brand">
-          <div className="admin-brand-title">CORDOVA STAYS</div>
-          <div className="admin-brand-sub">RESERVATION SYSTEM</div>
+        <div className="admin-brand" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div className="admin-brand-title">CORDOVA STAYS</div>
+            <div className="admin-brand-sub">RESERVATION SYSTEM</div>
+          </div>
+          <button
+            type="button"
+            className="mobile-menu-btn"
+            onClick={() => setSidebarOpen(false)}
+            style={{ color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.25)', padding: '4px 8px' }}
+          >
+            ✕
+          </button>
         </div>
 
         <nav className="admin-nav">
@@ -165,25 +182,26 @@ export default function AdminLayout({ title = 'Admin Dashboard', subtitle = '' }
 
       <div className="admin-content-area">
         <header className="admin-topbar">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
             <button
               type="button"
               className="mobile-menu-btn"
               onClick={() => setSidebarOpen((o) => !o)}
+              aria-label="Toggle admin sidebar"
             >
               ☰
             </button>
-            <div>
-              <h1 style={{ fontSize: 24, fontWeight: 800, color: '#0F3F40', lineHeight: 1.2 }}>
+            <div style={{ minWidth: 0 }}>
+              <h1 className="admin-topbar-title" style={{ fontSize: 24, fontWeight: 800, color: '#0F3F40', lineHeight: 1.2 }}>
                 {hTitle}
               </h1>
               {hSub && (
-                <div style={{ fontSize: 13, color: '#6B8585', marginTop: 2 }}>{hSub}</div>
+                <div className="admin-topbar-sub" style={{ fontSize: 13, color: '#6B8585', marginTop: 2 }}>{hSub}</div>
               )}
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'relative', flexShrink: 0 }}>
             {/* Live Admin Notification Bell */}
             <div style={{ position: 'relative' }}>
               <button
@@ -235,7 +253,7 @@ export default function AdminLayout({ title = 'Admin Dashboard', subtitle = '' }
                     position: 'absolute',
                     right: 0,
                     top: 44,
-                    width: 280,
+                    width: 260,
                     padding: 14,
                     zIndex: 100,
                     boxShadow: '0 10px 28px rgba(15, 63, 64, 0.14)',
@@ -291,11 +309,12 @@ export default function AdminLayout({ title = 'Admin Dashboard', subtitle = '' }
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                flexShrink: 0,
               }}
             >
               {(adminUser?.role === 'admin' ? 'A' : adminUser?.name?.charAt(0) || 'A').toUpperCase()}
             </div>
-            <div>
+            <div className="admin-user-meta">
               <div style={{ fontSize: 13.5, fontWeight: 700, color: '#0F3F40', lineHeight: 1.2 }}>
                 {adminUser?.role === 'admin' ? 'Administrator' : adminUser?.name || 'Administrator'}
               </div>

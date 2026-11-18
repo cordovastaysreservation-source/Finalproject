@@ -69,7 +69,7 @@ export function LoginPage() {
         Welcome back! Enter your details to continue.
       </p>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <form onSubmit={handleSubmit} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <FormInput
           label="Email address"
           type="email"
@@ -77,6 +77,7 @@ export function LoginPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email?.[0]}
+          autoComplete="off"
           required
         />
 
@@ -87,6 +88,7 @@ export function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           showToggle
           error={errors.password?.[0]}
+          autoComplete="new-password"
           required
         />
 
@@ -289,13 +291,14 @@ export function RegisterPage() {
         Sign up to manage your resort reservations.
       </p>
 
-      <form onSubmit={handleSendOtp} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <form onSubmit={handleSendOtp} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <FormInput
           label="Full name"
           placeholder="Enter your full name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={errors.name?.[0]}
+          autoComplete="off"
           required
         />
 
@@ -306,6 +309,7 @@ export function RegisterPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email?.[0]}
+          autoComplete="off"
           required
         />
 
@@ -316,6 +320,7 @@ export function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
           showToggle
           error={errors.password?.[0]}
+          autoComplete="new-password"
           required
         />
 
@@ -325,6 +330,7 @@ export function RegisterPage() {
           value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           showToggle
+          autoComplete="new-password"
           required
         />
 
@@ -614,7 +620,7 @@ export function CreateNewPasswordPage() {
         Choose a new password for your account.
       </p>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <form onSubmit={handleSubmit} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <FormInput
           label="New password"
           placeholder="Enter new password"
@@ -622,6 +628,7 @@ export function CreateNewPasswordPage() {
           onChange={(e) => setPassword(e.target.value)}
           showToggle
           error={errors.password?.[0]}
+          autoComplete="new-password"
           required
         />
 
@@ -631,6 +638,7 @@ export function CreateNewPasswordPage() {
           value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           showToggle
+          autoComplete="new-password"
           required
         />
 
@@ -783,7 +791,7 @@ export function ChangePasswordPage() {
         Choose a new password for your account.
       </p>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <form onSubmit={handleSubmit} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <FormInput
           label="Email address"
           type="email"
@@ -791,6 +799,7 @@ export function ChangePasswordPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email?.[0]}
+          autoComplete="off"
           required
         />
 
@@ -801,6 +810,7 @@ export function ChangePasswordPage() {
           onChange={(e) => setPassword(e.target.value)}
           showToggle
           error={errors.password?.[0]}
+          autoComplete="new-password"
           required
         />
 
@@ -810,6 +820,7 @@ export function ChangePasswordPage() {
           value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           showToggle
+          autoComplete="new-password"
           required
         />
 

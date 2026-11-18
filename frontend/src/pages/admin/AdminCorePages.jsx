@@ -208,7 +208,7 @@ export function AdminLoginPage() {
             Sign in to access your dashboard
           </p>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <form onSubmit={handleSubmit} autoComplete="off" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div className="cs-input-wrap">
               <span style={{ position: 'absolute', left: 14, color: '#94A3B8' }}>✉</span>
               <input
@@ -218,6 +218,7 @@ export function AdminLoginPage() {
                 placeholder="Email Address"
                 className="cs-input"
                 style={{ paddingLeft: 38, height: 46 }}
+                autoComplete="off"
                 required
               />
             </div>
@@ -231,6 +232,7 @@ export function AdminLoginPage() {
                 placeholder="Password"
                 className="cs-input"
                 style={{ paddingLeft: 38, height: 46 }}
+                autoComplete="new-password"
                 required
               />
             </div>

@@ -26,6 +26,8 @@
 
 # Reference PDFs & OS/Editor files
 /*.pdf
+.vercel
+/frontend/.vercel
 .DS_Store
 Thumbs.db
 .vscode/
